@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>앱 이동</title>
+  <script>
+  var kluboAppLoad = function (scheme_url) {
+    if (scheme_url == null || scheme_url == undefined) {
+        scheme_url = "smartcaddie://test";
+    }
+
+    var userAgent = navigator.userAgent.toLowerCase();
+    var visitedAt = new Date().getTime();
+
+    //안드로이드
+    if (userAgent.indexOf("android") > -1) {
+        //크롬 브라우저인 경우
+        if (userAgent.indexOf("chrome") > -1) {
+            var tempScheme = scheme_url.replace("smartcaddie://", "");
+            location.href =
+                "intent://" +
+                tempScheme +
+                "#Intent;scheme=smartcaddie;package=com.golfbuddy.smartcaddie;end;";
+        } else {
+            //크롬 아닌경우
+            var iframe = document.createElement("iframe");
+            iframe.style.visibility = "hidden";
+            iframe.src = scheme_url;
+            document.body.appendChild(iframe);
+            document.body.removeChild(iframe); // back 호출시 캐싱될 수 있으므로 제거
+
+            // 크롬 이외의 브라우저들
+            setTimeout(function () {
+                if (new Date().getTime() - visitedAt < 3000) {
+                    location.href = "market://details?id=com.golfbuddy.smartcaddie";
+                }
+            }, SET_TIMEOUT);
+        }
+    } else {
+        //아이폰, 안드로이드 외
+        location.href = scheme_url;
+    }
+};
+
+document.addEventListener("DOMContentLoaded", function(){
+	kluboAppLoad('smartcaddie://test');
+});
+  </script>
+</head>
+<body>
+</body>
+</html>
