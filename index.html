@@ -1,14 +1,48 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>GA테스트</title>
+    <!-- Google Analytics 태그 (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-3HR7EQ3Q6G"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-3HR7EQ3Q6G');
+
+      // UTM 파라미터 추적 함수
+      function trackUTMRedirect() {
+        // URL에서 UTM 파라미터 추출
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // UTM 파라미터 값 추출
+        const utmSource = urlParams.get('utm_source') || 'unknown';
+        const utmMedium = urlParams.get('utm_medium') || 'unknown';
+        const utmCampaign = urlParams.get('utm_campaign') || 'unknown';
+        const utmContent = urlParams.get('utm_content') || 'unknown';
+
+        // GA4 이벤트 로깅
+        gtag('event', 'utm_redirect', {
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          utm_content: utmContent,
+        });
+
+        // 구글 플레이 스토어로 리다이렉트
+        const appStoreUrl = `https://play.google.com/store/apps/details?id=com.golfbuddy.smartcaddie`;
+        window.location.href = appStoreUrl;
+      }
+
+      // 페이지 로드 시 리다이렉트 및 추적 실행
+      window.onload = trackUTMRedirect;
+    </script>
   </head>
   <body>
-    <p>임시 GA 테스트 페이지</p>
+    <h1>Redirecting to Google Play Store...</h1>
   </body>
 </html>
